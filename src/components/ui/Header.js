@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
   AppBar,
@@ -13,6 +14,9 @@ import {
   useTheme,
   SwipeableDrawer,
   IconButton,
+  List,
+  ListItem,
+  ListItemText,
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
@@ -72,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
-  drawer: {
+  drawerIconContainer: {
     marginLeft: "auto",
     "&:hover": {
       backgroundColor: "transparent",
@@ -85,6 +89,23 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       fontSize: "2.5rem",
     },
+  },
+  drawer: {
+    backgroundColor: theme.palette.common.blue,
+  },
+  drawerItem: {
+    ...theme.typography.tab,
+    color: theme.palette.common.white,
+    opacity: 0.7,
+  },
+  drawerItemEstimate: {
+    backgroundColor: theme.palette.common.orange,
+  },
+  drawerItemSelected: {
+    "& .MuiListItemText-root": { opacity: 1 },
+  },
+  appBar: {
+    zIndex: theme.zIndex.modal + 1,
   },
 }));
 
@@ -133,38 +154,58 @@ export default function Header(props) {
     setOpenMenu(false);
   };
 
-  useEffect(() => {
-    if (window.location.pathname === "/" && value !== 0) {
-      setValue(0);
-    } else if (window.location.pathname === "/services" && value !== 1) {
-      setValue(1);
-      setSelectedIndex(0);
-    } else if (window.location.pathname === "/customsoftware" && value !== 1) {
-      setValue(1);
-      setSelectedIndex(1);
-    } else if (window.location.pathname === "/mobileapps" && value !== 1) {
-      setValue(1);
-      setSelectedIndex(2);
-    } else if (window.location.pathname === "/websites" && value !== 1) {
-      setValue(1);
-      setSelectedIndex(3);
-    } else if (window.location.pathname === "/revolution" && value !== 2) {
-      setValue(2);
-    } else if (window.location.pathname === "/about" && value !== 3) {
-      setValue(3);
-    } else if (window.location.pathname === "/contact" && value !== 4) {
-      setValue(4);
-    } else if (window.location.pathname === "/estimate" && value !== 5) {
-      setValue(5);
-    }
-  }, [value]);
-
-  const options = [
-    { name: "Services", path: "/services" },
-    { name: "Custom Software Development", path: "/customsoftware" },
-    { name: "Mobile App Development", path: "/mobileapps" },
-    { name: "Websites", path: "/websites" },
+  const menuOptions = [
+    {
+      name: "Custom Software Development",
+      path: "/customsoftware",
+      activeIndex: 1,
+      selectedIndex: 0,
+    },
+    {
+      name: "iOS/Android App Development",
+      path: "/mobileapps",
+      activeIndex: 1,
+      selectedIndex: 1,
+    },
+    {
+      name: "Website Development",
+      path: "/websites",
+      activeIndex: 1,
+      selectedIndex: 2,
+    },
   ];
+
+  const routes = [
+    { name: "Home", path: "/", activeIndex: 0 },
+    {
+      name: "Services",
+      path: "/services",
+      activeIndex: 1,
+      ariaOwns: anchorEl ? "simple-menu" : undefined,
+      ariaPopup: anchorEl ? "true" : undefined,
+      mouseOver: (event) => handleClick(event),
+    },
+    { name: "The Revolution", path: "/revolution", activeIndex: 2 },
+    { name: "About Us", path: "/about", activeIndex: 3 },
+    { name: "Contact Us", path: "/contact", activeIndex: 4 },
+  ];
+
+  useEffect(() => {
+    [...menuOptions, ...routes].forEach((route) => {
+      switch (window.location.pathname) {
+        case `${route.path}`:
+          if (value !== route.activeIndex) {
+            setValue(route.activeIndex);
+            if (route.selectedIndex && route.selectedIndex !== selectedIndex) {
+              setSelectedIndex(route.selectedIndex);
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    });
+  }, [value, menuOptions, routes, selectedIndex]);
 
   const tabs = (
     <React.Fragment>
@@ -174,34 +215,18 @@ export default function Header(props) {
         className={classes.tabContainer}
         indicatorColor="primary"
       >
-        <Tab className={classes.tab} component={Link} label="Home" to="/"></Tab>
-        <Tab
-          aria-owns={anchorEl ? "simple-menu" : undefined}
-          aria-haspopup={anchorEl ? "true" : undefined}
-          className={classes.tab}
-          component={Link}
-          onMouseOver={(event) => handleClick(event)}
-          label="Services"
-          to="/services"
-        ></Tab>
-        <Tab
-          className={classes.tab}
-          component={Link}
-          label="The Revolution"
-          to="/revolution"
-        ></Tab>
-        <Tab
-          className={classes.tab}
-          component={Link}
-          label="About Us"
-          to="/about"
-        ></Tab>
-        <Tab
-          className={classes.tab}
-          component={Link}
-          label="Contact Us"
-          to="/contact"
-        ></Tab>
+        {routes.map((route, index) => (
+          <Tab
+            key={`${route}${index}`}
+            className={classes.tab}
+            component={Link}
+            to={route.path}
+            label={route.name}
+            aria-owns={route.ariaOwns}
+            aria-haspopup={route.ariaPopup}
+            onMouseOver={route.mouseOver}
+          />
+        ))}
       </Tabs>
       <Button
         variant="contained"
@@ -215,17 +240,18 @@ export default function Header(props) {
       </Button>
       <Menu
         id="simple-menu"
+        keepMounted
         anchorEl={anchorEl}
         MenuListProps={{ onMouseLeave: handleClose }}
-        keepMounted
         open={openMenu}
         onClose={handleClose}
         classes={{ paper: classes.menu }}
         elevation={0}
+        style={{ zIndex: 1302 }}
       >
-        {options.map((option, index) => (
+        {menuOptions.map((option, index) => (
           <MenuItem
-            key={option}
+            key={`${option}${index}`}
             component={Link}
             onClick={(event) => {
               handleMenuItemClick(event, index);
@@ -242,6 +268,49 @@ export default function Header(props) {
     </React.Fragment>
   );
 
+  const listComponent = (
+    <List disablePadding component="nav" aria-label="main navigation list">
+      {routes.map((route) => (
+        <ListItem
+          key={`${route}${route.activeIndex}`}
+          onClick={() => {
+            setOpenDrawer(false);
+            setValue(route.activeIndex);
+          }}
+          divider
+          button
+          selected={value === route.activeIndex}
+          classes={{ selected: classes.drawerItemSelected }}
+          component={Link}
+          to={route.path}
+        >
+          <ListItemText className={classes.drawerItem} disableTypography>
+            {route.name}
+          </ListItemText>
+        </ListItem>
+      ))}
+      <ListItem
+        onClick={() => {
+          setOpenDrawer(false);
+          setValue(5);
+        }}
+        divider
+        button
+        selected={value === 5}
+        component={Link}
+        to="/estimate"
+        classes={{
+          root: classes.drawerItemEstimate,
+          selected: classes.drawerItemSelected,
+        }}
+      >
+        <ListItemText className={classes.drawerItem} disableTypography>
+          Free Estimate
+        </ListItemText>
+      </ListItem>
+    </List>
+  );
+
   const drawer = (
     <React.Fragment>
       <SwipeableDrawer
@@ -250,11 +319,13 @@ export default function Header(props) {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
         onOpen={() => setOpenDrawer(true)}
+        classes={{ paper: classes.drawer }}
       >
-        Example Drawer
+        <div className={classes.toolbarMargin} />
+        {listComponent}
       </SwipeableDrawer>
       <IconButton
-        className={classes.drawer}
+        className={classes.drawerIconContainer}
         onClick={() => setOpenDrawer(!openDrawer)}
         disableRipple
       >
@@ -266,7 +337,7 @@ export default function Header(props) {
   return (
     <React.Fragment>
       <ElevationScroll>
-        <AppBar>
+        <AppBar position="fixed" className={classes.appBar}>
           <Toolbar disableGutters>
             <Button
               component={Link}
@@ -281,7 +352,7 @@ export default function Header(props) {
           </Toolbar>
         </AppBar>
       </ElevationScroll>
-      <div className={classes.toolbarMargin}></div>
+      <div className={classes.toolbarMargin} />
     </React.Fragment>
   );
 }
