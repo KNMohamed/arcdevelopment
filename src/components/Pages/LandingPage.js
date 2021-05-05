@@ -18,6 +18,7 @@ import customSoftwareIcon from "../../assets/Custom Software Icon.svg";
 import websitesIcon from "../../assets/websiteIcon.svg";
 import revolutionBackground from "../../assets/repeatingBackground.svg";
 import infoBackground from "../../assets/infoBackground.svg";
+import CallToAction from "../ui/CallToAction";
 
 const useStyles = makeStyles((theme) => ({
   animation: {
@@ -327,7 +328,7 @@ export default function LandingPage() {
         {/*-----The Revolution Block-----*/}
         <Grid
           container
-          style={{ height: "100em" }}
+          style={{ height: "100em", marginTop: "12em" }}
           alignItems="center"
           justify="center"
         >
@@ -440,6 +441,10 @@ export default function LandingPage() {
           </Grid>
           <div className={classes.infoBackground} />
         </Grid>
+      </Grid>
+      <Grid item>
+        {/*-----Call to action block-----*/}
+        <CallToAction />
       </Grid>
     </Grid>
   );
