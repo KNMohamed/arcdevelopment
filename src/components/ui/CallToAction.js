@@ -8,7 +8,7 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import ButtonArrow from "./ButtonArrow";
-
+import { Link } from "react-router-dom";
 import background from "../../assets/background.jpg";
 import mobileBackground from "../../assets/mobileBackground.jpg";
 
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CallToAction() {
+export default function CallToAction(props) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -87,7 +87,13 @@ export default function CallToAction() {
               Take advantage of the 21st Century.
             </Typography>
             <Grid container item justify={matchesSM ? "center" : undefined}>
-              <Button variant="outlined" className={classes.learnButton}>
+              <Button
+                variant="outlined"
+                className={classes.learnButton}
+                component={Link}
+                to="/revolution"
+                onClick={() => props.setValue(2)}
+              >
                 <span style={{ marginRight: 5 }}>Learn More</span>
                 <ButtonArrow
                   width={10}
@@ -102,7 +108,13 @@ export default function CallToAction() {
       <Grid item>
         <Grid container direction="column">
           <Grid item>
-            <Button variant="contained" className={classes.estimateButton}>
+            <Button
+              variant="contained"
+              className={classes.estimateButton}
+              component={Link}
+              to="/estimate"
+              onClick={() => props.setValue(5)}
+            >
               Free Estimate
             </Button>
           </Grid>

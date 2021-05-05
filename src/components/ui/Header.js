@@ -156,23 +156,24 @@ export default function Header(props) {
   };
 
   const menuOptions = [
+    { name: "Services", path: "/services", activeIndex: 1, selectedIndex: 0 },
     {
       name: "Custom Software Development",
       path: "/customsoftware",
       activeIndex: 1,
-      selectedIndex: 0,
+      selectedIndex: 1,
     },
     {
       name: "iOS/Android App Development",
       path: "/mobileapps",
       activeIndex: 1,
-      selectedIndex: 1,
+      selectedIndex: 2,
     },
     {
       name: "Website Development",
       path: "/websites",
       activeIndex: 1,
-      selectedIndex: 2,
+      selectedIndex: 3,
     },
   ];
 
@@ -204,6 +205,9 @@ export default function Header(props) {
               props.setSelectedIndex(route.selectedIndex);
             }
           }
+          break;
+        case "/estimate":
+          props.setValue(5);
           break;
         default:
           break;
@@ -260,6 +264,7 @@ export default function Header(props) {
             onClick={(event) => {
               handleMenuItemClick(event, index);
               props.setValue(1);
+              handleClose();
             }}
             to={option.path}
             classes={{ root: classes.menuItem }}
