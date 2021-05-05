@@ -17,12 +17,12 @@ const useStyles = makeStyles((theme) => ({
   },
   adornment: {
     verticalAlign: "bottom",
-    height: "25em",
+    width: "25em",
     [theme.breakpoints.down("md")]: {
-      height: "21em",
+      width: "21em",
     },
     [theme.breakpoints.down("xs")]: {
-      height: "15em",
+      width: "15em",
     },
   },
   mainContainer: {
