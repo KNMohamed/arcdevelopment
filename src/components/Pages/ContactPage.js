@@ -4,6 +4,8 @@ import {
   Button,
   TextField,
   useMediaQuery,
+  Dialog,
+  DialogContent,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import React, { useState } from "react";
@@ -70,6 +72,10 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.secondary.light,
     },
+    [theme.breakpoints.down("sm")]: {
+      height: 40,
+      width: 225,
+    },
   },
 }));
 
@@ -79,6 +85,7 @@ export default function ContactPage(props) {
 
   const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
+  const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [values, setValues] = useState({
     name: "",
@@ -87,8 +94,37 @@ export default function ContactPage(props) {
     message: "",
   });
 
+  const [emailHelper, setEmailHelper] = useState("");
+  const [phoneHelper, setPhoneHelper] = useState("");
+  const [open, setOpen] = useState(false);
+
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
+    let valid;
+    switch (event.target.id) {
+      case "email":
+        valid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+          event.target.value
+        );
+        if (!valid) {
+          setEmailHelper("Invalid email");
+        } else {
+          setEmailHelper("");
+        }
+        break;
+      case "phone":
+        valid = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(
+          event.target.value
+        );
+        if (!valid) {
+          setPhoneHelper("Invalid phone");
+        } else {
+          setPhoneHelper("");
+        }
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -138,7 +174,12 @@ export default function ContactPage(props) {
                   variant="body1"
                   style={{ color: theme.palette.common.blue, fontSize: "1rem" }}
                 >
-                  (555) 555-5555
+                  <a
+                    style={{ textDecoration: "none", color: "inherit" }}
+                    href="tel:5555555555"
+                  >
+                    (555) 555-5555
+                  </a>
                 </Typography>
               </Grid>
             </Grid>
@@ -155,7 +196,12 @@ export default function ContactPage(props) {
                   variant="body1"
                   style={{ color: theme.palette.common.blue, fontSize: "1rem" }}
                 >
-                  Khalid.N.Mohamed@outlook.com
+                  <a
+                    style={{ textDecoration: "none", color: "inherit" }}
+                    href="mailto:khalid.n.mohamed@outlook.com"
+                  >
+                    Khalid.N.Mohamed@outlook.com
+                  </a>
                 </Typography>
               </Grid>
             </Grid>
@@ -180,6 +226,8 @@ export default function ContactPage(props) {
                   id="email"
                   label="Email"
                   name="email"
+                  error={emailHelper.length !== 0}
+                  helperText={emailHelper}
                   value={values.email}
                   onChange={handleChange}
                   fullWidth
@@ -190,6 +238,8 @@ export default function ContactPage(props) {
                   id="phone"
                   label="Phone"
                   name="phone"
+                  error={phoneHelper.length !== 0}
+                  helperText={phoneHelper}
                   value={values.phone}
                   onChange={handleChange}
                   fullWidth
@@ -210,7 +260,19 @@ export default function ContactPage(props) {
               />
             </Grid>
             <Grid item container justify="center" style={{ marginTop: "2em" }}>
-              <Button variant="contained" className={classes.sendButton}>
+              <Button
+                disabled={
+                  values.name.length === 0 ||
+                  values.message.length === 0 ||
+                  values.phone.length === 0 ||
+                  values.email.length === 0 ||
+                  phoneHelper.length !== 0 ||
+                  emailHelper.length !== 0
+                }
+                variant="contained"
+                className={classes.sendButton}
+                onClick={() => setOpen(true)}
+              >
                 Send message
                 <img
                   src={airplane}
@@ -222,6 +284,119 @@ export default function ContactPage(props) {
           </Grid>
         </Grid>
       </Grid>
+      <Dialog
+        style={{ zIndex: 1302 }}
+        open={open}
+        onClose={() => setOpen(false)}
+        PaperProps={{
+          style: {
+            padding: matchesXS
+              ? "0 1em"
+              : matchesSM
+              ? "5em 5em"
+              : matchesMD
+              ? "5em 10em"
+              : "5em 20em",
+          },
+        }}
+        fullScreen={matchesXS}
+      >
+        <DialogContent>
+          <Grid container direction="column">
+            <Grid item>
+              <Typography variant="h4" gutterBottom align="center">
+                Confirm Message
+              </Typography>
+            </Grid>
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                id="name"
+                label="Name"
+                name="name"
+                value={values.name}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                id="email"
+                label="Email"
+                name="email"
+                error={emailHelper.length !== 0}
+                helperText={emailHelper}
+                value={values.email}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                id="phone"
+                label="Phone"
+                name="phone"
+                error={phoneHelper.length !== 0}
+                helperText={phoneHelper}
+                value={values.phone}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+          <Grid item style={{ maxWidth: matchesXS ? "100%" : "20em" }}>
+            <TextField
+              id="message"
+              name="message"
+              multiline
+              rows={10}
+              value={values.message}
+              onChange={handleChange}
+              className={classes.message}
+              InputProps={{ disableUnderline: true }}
+              fullWidth
+            />
+          </Grid>
+          <Grid
+            item
+            container
+            direction={matchesSM ? "column" : "row"}
+            style={{ marginTop: "2em" }}
+            alignItems="center"
+          >
+            <Grid item>
+              <Button
+                color="primary"
+                onClick={() => setOpen(false)}
+                style={{ fontWeight: 300 }}
+              >
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                disabled={
+                  values.name.length === 0 ||
+                  values.message.length === 0 ||
+                  values.phone.length === 0 ||
+                  values.email.length === 0 ||
+                  phoneHelper.length !== 0 ||
+                  emailHelper.length !== 0
+                }
+                variant="contained"
+                className={classes.sendButton}
+                onClick={() => setOpen(true)}
+              >
+                Send message
+                <img
+                  src={airplane}
+                  alt="paper airplane"
+                  style={{ marginLeft: "1em" }}
+                />
+              </Button>
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </Dialog>
       <Grid
         item
         container
