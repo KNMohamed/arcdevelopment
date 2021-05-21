@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   CircularProgress,
+  Snackbar,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import React, { useState } from "react";
@@ -100,6 +101,11 @@ export default function ContactPage(props) {
   const [phoneHelper, setPhoneHelper] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
 
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -135,14 +141,28 @@ export default function ContactPage(props) {
     const url =
       "https://us-central1-material-ui-course-8afe8.cloudfunctions.net/sendMail";
     axios
-      .get(url)
+      .get(url, {
+        params: values,
+      })
       .then((response) => {
         setLoading(false);
         setOpen(false);
         setValues({ name: "", email: "", phone: "", message: "" });
+        setPhoneHelper("");
+        setEmailHelper("");
+        setAlert({
+          open: true,
+          message: "Message sent successfully",
+          backgroundColor: "#4BB543",
+        });
       })
       .catch((err) => {
         setLoading(false);
+        setAlert({
+          open: true,
+          message: "Something went wrong, please try again!",
+          backgroundColor: "#FF3232",
+        });
       });
   };
 
@@ -413,6 +433,14 @@ export default function ContactPage(props) {
           </Grid>
         </DialogContent>
       </Dialog>
+      <Snackbar
+        open={alert.open}
+        message={alert.message}
+        ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => setAlert({ ...alert, open: false })}
+        autoHideDuration={4000}
+      />
       <Grid
         item
         container
