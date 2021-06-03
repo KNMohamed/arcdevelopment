@@ -57,6 +57,7 @@ function App() {
               <CustomSoftwarePage
                 {...props}
                 setSelectedIndex={setSelectedIndex}
+                setValue={setValue}
               />
             )}
           />
@@ -64,22 +65,28 @@ function App() {
             exact
             path="/mobileapps"
             render={(props) => (
-              <MobileAppsPage {...props} setSelectedIndex={setSelectedIndex} />
+              <MobileAppsPage
+                {...props}
+                setSelectedIndex={setSelectedIndex}
+                setValue={setValue}
+              />
             )}
           />
           <Route
             exact
             path="/websites"
             render={(props) => (
-              <WebsitePage {...props} setSelectedIndex={setSelectedIndex} />
+              <WebsitePage
+                {...props}
+                setSelectedIndex={setSelectedIndex}
+                setValue={setValue}
+              />
             )}
           />
           <Route
             exact
             path="/revolution"
-            render={(props) => (
-              <RevolutionPage {...props} setValue={setValue} />
-            )}
+            render={(props) => <RevolutionPage {...props} />}
           />
           <Route
             exact

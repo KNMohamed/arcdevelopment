@@ -113,7 +113,7 @@ export default function CallToAction(props) {
               className={classes.estimateButton}
               component={Link}
               to="/estimate"
-              onClick={() => props.setValue(5)}
+              onClick={() => props.setValue(false)}
             >
               Free Estimate
             </Button>

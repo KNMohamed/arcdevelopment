@@ -162,7 +162,7 @@ export default function LandingPage(props) {
                   className={classes.estimate}
                   component={Link}
                   to="/estimate"
-                  onClick={() => props.setValue(5)}
+                  onClick={() => props.setValue(false)}
                 >
                   Free Estimate
                 </Button>

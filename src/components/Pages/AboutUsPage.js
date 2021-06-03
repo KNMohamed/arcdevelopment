@@ -126,7 +126,7 @@ export default function AboutUsPage(props) {
               </Typography>
               <Typography
                 variant="body1"
-                paragrap
+                paragraph
                 align={matchesMD ? "center" : undefined}
               >
                 It all started with one question: Why aren’t all businesses
@@ -195,13 +195,13 @@ export default function AboutUsPage(props) {
         <Grid item container justify={matchesMD ? "center" : undefined}>
           <Hidden lgUp>
             <Grid lg item style={{ maxWidth: "45em", padding: "1.25em" }}>
-              <Typography variant="body1" paragrpah align="center">
+              <Typography variant="body1" paragraph align="center">
                 I taught myself basic coding from a library book in third grade,
                 and ever since then my passion has solely been set on learning —
                 learning about computers, learning mathematics and philosophy,
                 studying design, always just learning.
               </Typography>
-              <Typography variant="body1" paragrpah align="center">
+              <Typography variant="body1" paragraph align="center">
                 Now I’m ready to apply everything I’ve learned, and to help
                 others with the intuition I have developed. I'm currently
                 teaching a course about building responsive modern user
@@ -233,13 +233,13 @@ export default function AboutUsPage(props) {
           </Grid>
           <Hidden mdDown>
             <Grid lg item style={{ maxWidth: "45em", padding: "1.25em" }}>
-              <Typography variant="body1" paragrpah align="center">
+              <Typography variant="body1" paragraph align="center">
                 I taught myself basic coding from a library book in third grade,
                 and ever since then my passion has solely been set on learning —
                 learning about computers, learning mathematics and philosophy,
                 studying design, always just learning.
               </Typography>
-              <Typography variant="body1" paragrpah align="center">
+              <Typography variant="body1" paragraph align="center">
                 Now I’m ready to apply everything I’ve learned, and to help
                 others with the intuition I have developed. I'm currently
                 teaching a course about building responsive modern user

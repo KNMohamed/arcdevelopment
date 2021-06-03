@@ -251,12 +251,7 @@ export default function ContactPage(props) {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid
-              item
-              container
-              direction="column"
-              style={{ maxWidth: "20em" }}
-            >
+            <Grid item container direction="column" style={{ width: "20em" }}>
               <Grid item style={{ marginBottom: "0.5em" }}>
                 <TextField
                   id="name"
@@ -292,7 +287,7 @@ export default function ContactPage(props) {
                 />
               </Grid>
             </Grid>
-            <Grid item style={{ maxWidth: "20em" }}>
+            <Grid item style={{ width: "20em" }}>
               <TextField
                 id="message"
                 name="message"
@@ -336,11 +331,11 @@ export default function ContactPage(props) {
               : matchesSM
               ? "5em 5em"
               : matchesMD
-              ? "5em 10em"
-              : "5em 20em",
+              ? "5em 15em"
+              : "5em 25em",
           },
         }}
-        fullScreen={matchesXS}
+        fullScreen={matchesSM}
       >
         <DialogContent>
           <Grid container direction="column">
@@ -384,7 +379,7 @@ export default function ContactPage(props) {
               />
             </Grid>
           </Grid>
-          <Grid item style={{ maxWidth: matchesXS ? "100%" : "20em" }}>
+          <Grid item style={{ width: matchesSM ? "100%" : "20em" }}>
             <TextField
               id="message"
               name="message"
@@ -499,7 +494,7 @@ export default function ContactPage(props) {
                 className={classes.estimateButton}
                 component={Link}
                 to="/estimate"
-                onClick={() => props.setValue(5)}
+                onClick={() => props.setValue(false)}
               >
                 Free Estimate
               </Button>
